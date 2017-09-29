@@ -1,3 +1,5 @@
 *.env
 getToken.rb
 *.bat
+*.html
+*.log

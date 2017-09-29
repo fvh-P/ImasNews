@@ -40,7 +40,7 @@ post = Array.new
 end
 
 post.reverse.each do |e|
-    puts e
+    e << "\n#imas_news"
     client.create_status(e)
 end
 
