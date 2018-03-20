@@ -50,12 +50,12 @@ post = Array.new
 end
 
 post.reverse.each do |e|
-  e << "\n#imas_news"
-  client.create_status(e)
+  client.create_status("#{e}\n#imas_news")
   feed_list.each do |id|
     feed = "@#{client.account(id).username} \n#{e}"
     client.create_status(feed, visibility: 'direct')
   end
+  e << "\n#imas_news"
 end
 
 if post.length != 0
