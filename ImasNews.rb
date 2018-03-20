@@ -7,8 +7,18 @@ require 'dotenv'
 
 Dir.chdir(File.expand_path("../", __FILE__))
 Dotenv.load
+
+begin
+  f = File.open(File.expand_path(ENV["FEED_LIST"], __FILE__), "r")
+  feed_list = f.readlines.map do |l|
+    l.to_i
+  end
+rescue
+  feed_list = []
+end
+
 log = Nokogiri::HTML(open(File.expand_path("../ImasNewsLog.html", __FILE__))).css("a")
-f = File.open(File.expand_path("../ImasNews.log", __FILE__),"a")
+f = File.open(File.expand_path("../ImasNews.log", __FILE__), "a")
 client = Mastodon::REST::Client.new(base_url: ENV["MASTODON_URL"], bearer_token: ENV["MASTODON_ACCESS_TOKEN"])
 src = "http://idolmaster.jp/"
 
@@ -42,6 +52,10 @@ end
 post.reverse.each do |e|
   e << "\n#imas_news"
   client.create_status(e)
+  feed_list.each do |id|
+    feed = "@#{client.account(id).username} \n#{e}"
+    client.create_status(feed, visibility: 'direct')
+  end
 end
 
 if post.length != 0
