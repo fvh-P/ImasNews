@@ -52,7 +52,7 @@ end
 post.reverse.each do |e|
   client.create_status("#{e}\n#imas_news")
   feed_list.each do |id|
-    feed = "@#{client.account(id).username} \n#{e}"
+    feed = "@#{client.account(id).acct} \n#{e}"
     client.create_status(feed, visibility: 'direct')
   end
   e << "\n#imas_news"
