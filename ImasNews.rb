@@ -34,10 +34,10 @@ end
 
 news = doc.xpath('.//div[@class="news-contents has-result"]/ul/li')
 
-news.each do |n|
+news.reverse.each do |n|
   title = n.xpath('.//div[@class="text-area"]/p[@class="text"]')&.inner_text
-  next if log.xpath('//div[@class="text-area"]/p[@class="text"]').map(&:inner_text).include?(title)
-  url = n.xpath('.//a')&.attribute("href")
+  url = n.xpath('.//a')&.attribute("href").value
+  next if log.map{|x| x.xpath('.//a')&.attribute("href").value}.include?(url)
   post = "【アイマスニュース】\n#{title}\n#{url}"
   client.create_status("#{post}\n#imas_news")
   feed_list.each do |id|
